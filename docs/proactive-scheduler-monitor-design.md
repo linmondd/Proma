@@ -6,7 +6,7 @@
 
 ## 1. 背景
 
-Proma 现在已经具备 Agent 会话、工作区 Skills/MCP、本地 JSON/JSONL 会话持久化、Quick Task、后台 Agent 执行、记忆工具、飞书通知等底座。下一步的关键不是简单加一个 Cron 配置页，而是把 Proma 从“用户发起一次对话”推进到“用户可以委托 Proma 长期关注、定期整理、持续跟进”的主动协作系统。
+Proma 现在已经具备 Agent 会话、工作区 Skills/MCP、本地 JSON/JSONL 会话持久化、Quick Task、后台 Agent 执行、记忆工具、桌面通知等底座。下一步的关键不是简单加一个 Cron 配置页，而是把 Proma 从“用户发起一次对话”推进到“用户可以委托 Proma 长期关注、定期整理、持续跟进”的主动协作系统。
 
 这份设计把三个来源合并成一个产品方向：
 
@@ -391,7 +391,7 @@ Settings 只放全局策略：
 - 单次最大 cost。
 - 最大并发。
 - 失败通知策略。
-- 飞书/桌面通知开关。
+- 桌面通知开关。
 - 数据保留策略。
 
 ## 7. 用户主动推荐机制
@@ -1302,7 +1302,7 @@ Scenario: Stop a runaway proactive run
 2. `Proma_Proactive` 是否直接迁入主仓库，还是保持外置但用插件 manifest 安装？
 3. Memory 写入默认策略：全部审批，还是低风险日志自动写入、profile/correction 审批？
 4. 是否第一阶段支持 webhook monitor？
-5. 飞书通知是否作为 Proactive 的默认通知渠道之一？
+5. 桌面通知是否作为 Proactive 的默认通知渠道之一？
 6. Schedule missed run 默认策略：跳过、补跑一次、还是询问用户？
 
 ## 17. 推荐的下一步

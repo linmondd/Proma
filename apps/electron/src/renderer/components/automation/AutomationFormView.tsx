@@ -11,7 +11,7 @@
 import * as React from 'react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { toast } from 'sonner'
-import { AlertTriangle, ArrowLeft, Bell, Check, Clock, Loader2, Pencil, Play, Settings, X } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, Check, Clock, Loader2, Pencil, Play, Settings, X } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import {
@@ -38,16 +38,12 @@ import { settingsOpenAtom, settingsTabAtom } from '@/atoms/settings-tab'
 import { useOpenSession } from '@/hooks/useOpenSession'
 import { MarkdownRichEditor } from '@/components/diff/MarkdownRichEditor'
 import type {
-  AutomationFeishuNotificationTarget,
-  AutomationNotificationTarget,
   AutomationRun,
   CreateAutomationInput,
-  FeishuChatBinding,
   UpdateAutomationInput,
 } from '@proma/shared'
 
 const NO_WORKSPACE = '__none__'
-const NO_FEISHU_BINDING = '__none__'
 
 function formatTime(ts?: number): string {
   if (!ts) return '—'
@@ -77,7 +73,6 @@ function getDraftSignature(draft: AutomationDraft): string {
     modelId: draft.modelId ?? '',
     workspaceId: draft.workspaceId ?? '',
     permissionMode: draft.permissionMode,
-    notificationTargets: draft.notificationTargets ?? [],
     active: draft.active,
   })
 }
@@ -94,7 +89,6 @@ function draftToCreateInput(draft: AutomationDraft): CreateAutomationInput {
     modelId: draft.modelId,
     workspaceId: draft.workspaceId,
     permissionMode: draft.permissionMode,
-    notificationTargets: draft.notificationTargets,
     sourceSessionId: draft.sourceSessionId,
     active: draft.active,
   }
@@ -113,33 +107,8 @@ function draftToUpdateInput(draft: AutomationDraft): UpdateAutomationInput {
     modelId: draft.modelId,
     workspaceId: draft.workspaceId ?? '',
     permissionMode: draft.permissionMode,
-    notificationTargets: draft.notificationTargets ?? [],
+    notificationTargets: [],
     active: draft.active,
-  }
-}
-
-function getFeishuTarget(targets?: AutomationNotificationTarget[]): AutomationFeishuNotificationTarget | undefined {
-  return targets?.find((target): target is AutomationFeishuNotificationTarget => target.type === 'feishu')
-}
-
-function getFeishuBindingValue(binding: FeishuChatBinding): string {
-  return `${binding.botId}::${binding.chatId}`
-}
-
-function formatFeishuBinding(binding: FeishuChatBinding): string {
-  const name = binding.chatType === 'group'
-    ? binding.groupName || '未命名群聊'
-    : '飞书单聊'
-  return `${name} · ${binding.botId.slice(0, 8)}`
-}
-
-function createFeishuTarget(binding: FeishuChatBinding): AutomationFeishuNotificationTarget {
-  return {
-    type: 'feishu',
-    enabled: true,
-    trigger: 'always',
-    botId: binding.botId,
-    chatId: binding.chatId,
   }
 }
 
@@ -181,7 +150,6 @@ export function AutomationFormView(): React.ReactElement | null {
   const [form, setForm] = React.useState<AutomationDraft | null>(null)
   const [editingName, setEditingName] = React.useState(false)
   const [runningNow, setRunningNow] = React.useState(false)
-  const [feishuBindings, setFeishuBindings] = React.useState<FeishuChatBinding[]>([])
   const nameInputRef = React.useRef<HTMLInputElement>(null)
   const saveTimerRef = React.useRef<number | undefined>(undefined)
   const lastSavedSignatureRef = React.useRef('')
@@ -204,15 +172,6 @@ export function AutomationFormView(): React.ReactElement | null {
         : ''
     }
   }, [formState.open, formState.draft])
-
-  React.useEffect(() => {
-    if (!formState.open) return
-    window.electronAPI.listFeishuBindings()
-      .then(setFeishuBindings)
-      .catch((err: unknown) => {
-        console.error('[定时任务] 获取飞书绑定失败:', err)
-      })
-  }, [formState.open])
 
   React.useEffect(() => {
     latestFormRef.current = form
@@ -333,10 +292,6 @@ export function AutomationFormView(): React.ReactElement | null {
     setForm((prev) => (prev ? { ...prev, ...patch } : prev))
   }
 
-  const updateFeishuNotification = (target: AutomationFeishuNotificationTarget | null): void => {
-    update({ notificationTargets: target ? [target] : [] })
-  }
-
   const handleRunNow = async (): Promise<void> => {
     const latest = latestFormRef.current
     if (!latest || !canPersistDraft(latest)) {
@@ -419,13 +374,6 @@ export function AutomationFormView(): React.ReactElement | null {
   const selectedModel = form.channelId && form.modelId
     ? { channelId: form.channelId, modelId: form.modelId }
     : null
-  const feishuTarget = getFeishuTarget(form.notificationTargets)
-  const selectedFeishuBinding = feishuTarget
-    ? feishuBindings.find((binding) => binding.botId === feishuTarget.botId && binding.chatId === feishuTarget.chatId)
-    : undefined
-  const selectedFeishuBindingValue = selectedFeishuBinding
-    ? getFeishuBindingValue(selectedFeishuBinding)
-    : NO_FEISHU_BINDING
 
   return (
     <div className="titlebar-no-drag absolute inset-0 z-10 bg-content-area flex animate-in fade-in duration-200">
@@ -676,83 +624,6 @@ export function AutomationFormView(): React.ReactElement | null {
                 ))}
               </SelectContent>
             </Select>
-          </div>
-
-          {/* 飞书通知 */}
-          <div className="flex flex-col gap-2 rounded-lg bg-foreground/[0.03] p-3">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-start gap-2">
-                <Bell className="size-4 shrink-0 mt-0.5 text-primary" />
-                <div className="flex flex-col gap-0.5">
-                  <Label htmlFor="auto-feishu-notify">飞书通知</Label>
-                  <span className="text-xs text-muted-foreground leading-relaxed">
-                    任务结束后把结果推送到已有飞书绑定
-                  </span>
-                </div>
-              </div>
-              <Switch
-                id="auto-feishu-notify"
-                checked={feishuTarget?.enabled === true}
-                onCheckedChange={(checked) => {
-                  if (!checked) {
-                    updateFeishuNotification(null)
-                    return
-                  }
-                  const target = selectedFeishuBinding ?? feishuBindings[0]
-                  if (!target) {
-                    toast.error('暂无飞书绑定，请先在飞书里向 Bot 发送一条消息')
-                    return
-                  }
-                  updateFeishuNotification(feishuTarget
-                    ? { ...feishuTarget, enabled: true }
-                    : createFeishuTarget(target))
-                }}
-              />
-            </div>
-
-            {feishuTarget?.enabled === true && (
-              <div className="flex flex-col gap-2 pt-1">
-                <Select
-                  value={selectedFeishuBindingValue}
-                  onValueChange={(value) => {
-                    const binding = feishuBindings.find((item) => getFeishuBindingValue(item) === value)
-                    if (!binding) return
-                    updateFeishuNotification({
-                      ...createFeishuTarget(binding),
-                      trigger: feishuTarget.trigger,
-                    })
-                  }}
-                >
-                  <SelectTrigger><SelectValue placeholder="选择飞书聊天" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={NO_FEISHU_BINDING} disabled>
-                      {feishuBindings.length === 0 ? '暂无飞书绑定' : '选择飞书聊天'}
-                    </SelectItem>
-                    {feishuBindings.map((binding) => (
-                      <SelectItem key={getFeishuBindingValue(binding)} value={getFeishuBindingValue(binding)}>
-                        {formatFeishuBinding(binding)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select
-                  value={feishuTarget.trigger}
-                  onValueChange={(value) => {
-                    updateFeishuNotification({
-                      ...feishuTarget,
-                      trigger: value as AutomationFeishuNotificationTarget['trigger'],
-                    })
-                  }}
-                >
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="always">成功或失败都通知</SelectItem>
-                    <SelectItem value="success">仅成功时通知</SelectItem>
-                    <SelectItem value="error">仅失败时通知</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
           </div>
 
           {/* 权限模式 */}

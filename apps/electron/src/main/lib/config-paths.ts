@@ -534,53 +534,6 @@ export function getWeChatSyncPath(): string {
 }
 
 /**
- * 获取钉钉配置文件路径
- *
- * @returns ~/.proma/dingtalk.json
- */
-export function getDingTalkConfigPath(): string {
-  return join(getConfigDir(), 'dingtalk.json')
-}
-
-/**
- * 获取飞书配置文件路径
- *
- * @returns ~/.proma/feishu.json
- */
-export function getFeishuConfigPath(): string {
-  return join(getConfigDir(), 'feishu.json')
-}
-
-/**
- * 获取飞书聊天绑定持久化路径
- *
- * @returns ~/.proma/feishu-bindings.json
- */
-export function getFeishuBindingsPath(): string {
-  return join(getConfigDir(), 'feishu-bindings.json')
-}
-
-/**
- * 获取某个飞书 Bot 的聊天绑定持久化路径
- *
- * @returns ~/.proma/feishu-bindings-{botId}.json
- */
-export function getFeishuBotBindingsPath(botId: string): string {
-  return join(getConfigDir(), `feishu-bindings-${botId}.json`)
-}
-
-/**
- * 获取某个飞书 Bot 的运行时元数据持久化路径
- *
- * 用于保存最近交互用户 open_id 等需要跨进程重启恢复的状态。
- *
- * @returns ~/.proma/feishu-metadata-{botId}.json
- */
-export function getFeishuBotMetadataPath(botId: string): string {
-  return join(getConfigDir(), `feishu-metadata-${botId}.json`)
-}
-
-/**
  * 获取指定 Agent 会话的工作路径
  *
  * 在工作区目录下创建以 sessionId 命名的子文件夹，

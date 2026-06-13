@@ -100,11 +100,6 @@ import {
   stopBridgeSelfHealing,
 } from './lib/bridge-registry'
 import { startScheduler, stopScheduler } from './lib/automation-scheduler'
-import { feishuBridgeManager } from './lib/feishu-bridge-manager'
-import { getFeishuMultiBotConfig } from './lib/feishu-config'
-import { stopFeishuSyncSleepBlocker, syncFeishuSyncSleepBlocker } from './lib/feishu-sleep-blocker'
-import { dingtalkBridgeManager } from './lib/dingtalk-bridge-manager'
-import { getDingTalkMultiBotConfig } from './lib/dingtalk-config'
 import { wechatBridge } from './lib/wechat-bridge'
 import { getWeChatConfig } from './lib/wechat-config'
 import { createQuickTaskWindow, toggleQuickTaskWindow, destroyQuickTaskWindow } from './lib/quick-task-window'
@@ -130,48 +125,6 @@ function handleMigrationFileOpen(filePath: string): void {
 // ===== Bridge 注册（新增 Bridge 只需在此添加一个 registerBridge 调用） =====
 
 registerBridge({
-  name: '飞书 BridgeManager',
-  shouldAutoStart: () => {
-    const config = getFeishuMultiBotConfig()
-    return config.bots.some((b) => b.enabled && b.appId && b.appSecret)
-  },
-  needsRecovery: () => {
-    const config = getFeishuMultiBotConfig()
-    const states = feishuBridgeManager.getStates()
-    return config.bots.some((bot) => (
-      bot.enabled &&
-      !!bot.appId &&
-      !!bot.appSecret &&
-      states.bots[bot.id]?.status === 'error'
-    ))
-  },
-  start: () => feishuBridgeManager.startAll(),
-  stop: () => feishuBridgeManager.stopAll(),
-  recover: () => recoverEnabledFeishuBots(),
-})
-
-registerBridge({
-  name: '钉钉 BridgeManager',
-  shouldAutoStart: () => {
-    const config = getDingTalkMultiBotConfig()
-    return config.bots.some((b) => b.enabled && b.clientId && b.clientSecret)
-  },
-  needsRecovery: () => {
-    const config = getDingTalkMultiBotConfig()
-    const states = dingtalkBridgeManager.getStates()
-    return config.bots.some((bot) => (
-      bot.enabled &&
-      !!bot.clientId &&
-      !!bot.clientSecret &&
-      states.bots[bot.id]?.status === 'error'
-    ))
-  },
-  start: () => dingtalkBridgeManager.startAll(),
-  stop: () => dingtalkBridgeManager.stopAll(),
-  recover: () => recoverEnabledDingTalkBots(),
-})
-
-registerBridge({
   name: '微信 Bridge',
   shouldAutoStart: () => {
     const config = getWeChatConfig()
@@ -181,40 +134,6 @@ registerBridge({
   start: () => wechatBridge.start(),
   stop: () => wechatBridge.stop(),
 })
-
-async function recoverEnabledFeishuBots(): Promise<void> {
-  const config = getFeishuMultiBotConfig()
-  let failedCount = 0
-  for (const bot of config.bots) {
-    if (!bot.enabled || !bot.appId || !bot.appSecret) continue
-    try {
-      await feishuBridgeManager.restartBot(bot.id)
-    } catch (error) {
-      failedCount++
-      console.error(`[飞书 BridgeManager] Bot "${bot.name}" 自愈恢复失败:`, error)
-    }
-  }
-  if (failedCount > 0) {
-    throw new Error(`${failedCount} 个飞书 Bot 自愈恢复失败`)
-  }
-}
-
-async function recoverEnabledDingTalkBots(): Promise<void> {
-  const config = getDingTalkMultiBotConfig()
-  let failedCount = 0
-  for (const bot of config.bots) {
-    if (!bot.enabled || !bot.clientId || !bot.clientSecret) continue
-    try {
-      await dingtalkBridgeManager.restartBot(bot.id)
-    } catch (error) {
-      failedCount++
-      console.error(`[钉钉 BridgeManager] Bot "${bot.name}" 自愈恢复失败:`, error)
-    }
-  }
-  if (failedCount > 0) {
-    throw new Error(`${failedCount} 个钉钉 Bot 自愈恢复失败`)
-  }
-}
 
 let mainWindow: BrowserWindow | null = null
 
@@ -549,9 +468,6 @@ async function bootstrap(): Promise<void> {
     safeRun('createVoiceDictationWindow', createVoiceDictationWindow)
   }
 
-  // 飞书实时同步开启时，默认阻止系统自动休眠，保证远程群内继续可用。
-  safeRun('syncFeishuSyncSleepBlocker', () => syncFeishuSyncSleepBlocker(getSettings()))
-
   // 注册全局快捷键
   safeRun('registerGlobalShortcut:quick-task', () =>
     registerGlobalShortcut('quick-task', toggleQuickTaskWindow),
@@ -565,7 +481,7 @@ async function bootstrap(): Promise<void> {
     }),
   )
 
-  // 启动所有已注册的 Bridge（飞书/钉钉/微信等）
+  // 启动所有已注册的 Bridge（微信等）
   await safeAwait('startAllBridges', () => startAllBridges())
   safeRun('startBridgeSelfHealing', startBridgeSelfHealing)
 
@@ -622,7 +538,7 @@ function handleBootstrapFailure(err: unknown): void {
         `常见原因与排查：\n` +
         `1. 旧版 Proma 进程未退出（终端运行 killall Proma 后重试）\n` +
         `2. ~/.proma/ 配置损坏（重命名 ~/.proma 后重启）\n` +
-        `3. 系统 Keychain 无法解密保存的凭证（删除 ~/.proma/feishu.json 等后重新登录）\n\n` +
+        `3. 系统 Keychain 无法解密保存的凭证（重命名 ~/.proma 后重启）\n\n` +
         `如需协助请到 GitHub Issues 反馈。`,
     )
   } catch {
@@ -666,8 +582,6 @@ app.on('before-quit', () => {
   stopAllBridges()
   // 停止定时任务调度器
   stopScheduler()
-  // 释放飞书同步防休眠
-  stopFeishuSyncSleepBlocker()
   // 注销全局快捷键
   unregisterAllGlobalShortcuts()
   // 销毁快速任务窗口

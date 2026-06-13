@@ -1,7 +1,7 @@
 /**
  * Bridge 附件处理工具函数
  *
- * 为微信、钉钉、飞书等 Bridge 提供图片/文件的保存、类型推断、
+ * 为 IM Bridge 提供图片/文件的保存、类型推断、
  * 以及 <attached_files> XML 构建能力。
  */
 
@@ -144,7 +144,7 @@ interface FileTreeOptions {
   maxEntries?: number
 }
 
-// 树形连接符。用全角空格（U+3000）做对齐，避免飞书 markdown 折叠连续半角空格。
+// 树形连接符。用全角空格（U+3000）做对齐，避免 IM markdown 折叠连续半角空格。
 const TREE_BRANCH = '├─　'   // 非末尾节点
 const TREE_LAST = '└─　'     // 末尾节点
 const TREE_VERTICAL = '│　'  // 祖先分支延续

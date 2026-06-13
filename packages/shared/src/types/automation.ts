@@ -35,23 +35,8 @@ export type AutomationPermissionMode = 'auto' | 'bypassPermissions'
 /** 定时任务默认权限模式（向后兼容：旧任务无此字段时按此值运行） */
 export const AUTOMATION_DEFAULT_PERMISSION_MODE: AutomationPermissionMode = 'bypassPermissions'
 
-/** 定时任务通知触发条件 */
-export type AutomationNotificationTrigger = 'always' | 'success' | 'error'
-
-/** 飞书通知目标 */
-export interface AutomationFeishuNotificationTarget {
-  type: 'feishu'
-  enabled: boolean
-  /** 通知触发条件：默认 always */
-  trigger: AutomationNotificationTrigger
-  /** 负责发送通知的飞书 Bot ID */
-  botId: string
-  /** 飞书 chat_id（来自已有绑定） */
-  chatId: string
-}
-
-/** 定时任务通知目标（钉钉/微信后续扩展） */
-export type AutomationNotificationTarget = AutomationFeishuNotificationTarget
+/** 定时任务通知目标：外部 IM 通知已退役，当前不支持任何外部目标。 */
+export type AutomationNotificationTarget = never
 
 /** 定时任务定义 */
 export interface Automation {

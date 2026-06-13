@@ -42,7 +42,7 @@ proma-v2/
 
 #### @proma/shared (v0.1.15)
 - **导出模块**：`./types`、`./config`、`./utils`、`./constants/permission-rules`
-- **关键类型**：`AgentMessage`、`ChatMessage`、`Channel`、`PermissionRequest`、`FeishuConfig`
+- **关键类型**：`AgentMessage`、`ChatMessage`、`Channel`、`PermissionRequest`、`WeChatConfig`
 - **依赖**：无运行时依赖（仅 TypeScript）
 
 #### @proma/core (v0.2.2)
@@ -60,7 +60,6 @@ proma-v2/
 - **职责**：Electron 桌面应用主体，集成所有包
 - **关键依赖**：
   - `@anthropic-ai/claude-agent-sdk@0.3.143` - Agent SDK
-  - `@larksuiteoapi/node-sdk` - 飞书集成
   - Radix UI、TipTap、Tailwind CSS
   - 文件解析：`pdf-parse`、`officeparser`、`word-extractor`
 
@@ -136,7 +135,6 @@ bun run generate:icons    # 生成应用图标
 | **打包工具** | esbuild | 0.24.0+ |
 | **分发工具** | Electron Builder | 25.1.8 |
 | **Agent SDK** | @anthropic-ai/claude-agent-sdk | 0.3.143 |
-| **飞书 SDK** | @larksuiteoapi/node-sdk | 最新 |
 
 ## 核心架构
 
@@ -162,7 +160,6 @@ bun run generate:icons    # 生成应用图标
 - `SYSTEM_PROMPT_IPC_CHANNELS` - 系统提示词
 - `MEMORY_IPC_CHANNELS` - 记忆功能
 - `CHAT_TOOL_IPC_CHANNELS` - Chat 工具
-- `FEISHU_IPC_CHANNELS` - 飞书集成
 - `GITHUB_RELEASE_IPC_CHANNELS` - GitHub 发布
 
 ### 主进程服务层（`main/lib/`）
@@ -186,7 +183,7 @@ bun run generate:icons    # 生成应用图标
 
 | 服务 | 职责 |
 |------|------|
-| `feishu-bridge.ts` | 飞书集成（68KB）：消息同步、任务通知、OAuth 认证 |
+| `wechat-bridge.ts` | 微信桥接：扫码登录、消息路由、Agent 远程触发 |
 | `memory-service.ts` | 记忆管理：跨会话记忆存储与检索 |
 | `memos-client.ts` | Memos 客户端：笔记服务集成 |
 
@@ -255,7 +252,7 @@ bun run generate:icons    # 生成应用图标
 - **`app-shell/`**：三面板布局（LeftSidebar | NavigatorPanel | MainContentPanel），侧边栏含模式切换、置顶对话、日期分组列表、流式指示器
 - **`chat/`**：聊天核心 — ChatView（消息加载/流式订阅）、ChatHeader（模型选择/上下文设置）、ChatInput（Tiptap 富文本编辑器）、ChatMessages（消息列表/自动滚动）、ParallelChatMessages（并排模式）
 - **`agent/`**：Agent 模式 — AgentView（纯展示 + 交互，IPC 监听已提升到全局）、AgentHeader（渠道/模型选择）、AgentMessages（消息列表 + 工具活动）、ToolActivityItem（工具调用展示）、WorkspaceSelector（工作区切换）、PermissionBanner/AskUserBanner（权限/问答请求 UI）
-- **`settings/`**：设置面板 — GeneralSettings（用户档案）、AppearanceSettings（主题）、ChannelSettings（渠道管理）、ChannelForm（Provider 配置）、AgentSettings（Agent 渠道/工作区/MCP）、McpServerForm（MCP 服务器配置）、AboutSettings（版本/更新）、FeishuSettings（飞书集成）；含 `primitives/` 可复用表单组件
+- **`settings/`**：设置面板 — GeneralSettings（用户档案）、AppearanceSettings（主题）、ChannelSettings（渠道管理）、ChannelForm（Provider 配置）、AgentSettings（Agent 渠道/工作区/MCP）、McpServerForm（MCP 服务器配置）、AboutSettings（版本/更新）；含 `primitives/` 可复用表单组件
 - **`file-browser/`**：文件浏览器 — FileBrowser（工作区文件树浏览）
 - **`ai-elements/`**：AI 展示组件 — Markdown 渲染、代码块、Mermaid 图、推理折叠、上下文分割线、富文本输入
 - **`ui/`**：Radix UI 组件（现代化设计，CSS 变量主题）
@@ -488,7 +485,6 @@ React UI 更新
 
 - ✅ **多 Provider 支持**：Anthropic、OpenAI、DeepSeek、Kimi、智谱、MiniMax、豆包、通义千问、Google、自定义端点
 - ✅ **Agent SDK 集成**：基于 Claude Agent SDK 的完整 Agent 模式
-- ✅ **飞书集成**：消息同步、任务通知、OAuth 认证（68KB 核心服务）
 - ✅ **工作区管理**：多工作区隔离、MCP Server 配置、Skills 管理
 - ✅ **权限系统**：工具权限检查、用户确认流程
 - ✅ **记忆系统**：跨会话记忆存储与检索

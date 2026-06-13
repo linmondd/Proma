@@ -5,7 +5,7 @@ import type { ExternalAgentRunTab } from './external-agent-run'
 
 const session: AgentSessionMeta = {
   id: 'agent-1',
-  title: '飞书任务',
+  title: '外部任务',
   channelId: 'channel-1',
   workspaceId: 'workspace-1',
   createdAt: 1,
@@ -13,7 +13,7 @@ const session: AgentSessionMeta = {
 }
 
 describe('外部 Agent 运行激活', () => {
-  test('Given 飞书触发的新会话 When 前端收到运行开始事件 Then 打开并激活 Agent 标签', () => {
+  test('Given 外部入口触发的新会话 When 前端收到运行开始事件 Then 打开并激活 Agent 标签', () => {
     const result = buildExternalAgentRunActivation({
       tabs: [],
       sessions: [session],

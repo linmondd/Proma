@@ -1,10 +1,8 @@
 /**
  * 通用 Bridge 命令处理器
  *
- * 为微信、钉钉等平台提供统一的斜杠命令和 Agent 消息路由。
+ * 为微信等平台提供统一的斜杠命令和 Agent 消息路由。
  * 各平台通过 BridgePlatformAdapter 接入，只需实现发送文本的方法。
- *
- * 飞书 Bridge 使用独立的卡片消息格式，暂不接入此模块。
  */
 
 import { BrowserWindow } from 'electron'
@@ -48,7 +46,7 @@ export interface BridgeAttachment {
 
 /** 命令处理器配置 */
 export interface BridgeCommandHandlerConfig {
-  /** 平台名称，用于日志（如 '微信', '钉钉'） */
+  /** 平台名称，用于日志（如 '微信'） */
   platformName: string
   /** 平台适配器 */
   adapter: BridgePlatformAdapter

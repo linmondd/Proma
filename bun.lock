@@ -38,7 +38,6 @@
       "devDependencies": {
         "@emoji-mart/data": "^1.2.1",
         "@emoji-mart/react": "^1.1.1",
-        "@larksuiteoapi/node-sdk": "^1.65.0",
         "@proma/core": "workspace:*",
         "@proma/shared": "workspace:*",
         "@proma/ui": "workspace:*",
@@ -93,7 +92,6 @@
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "concurrently": "^9.2.1",
-        "dingtalk-stream-sdk-nodejs": "^2.0.4",
         "electron": "^39.5.1",
         "electron-builder": "^25.1.8",
         "electron-updater": "^6.7.3",
@@ -359,8 +357,6 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
-
-    "@larksuiteoapi/node-sdk": ["@larksuiteoapi/node-sdk@1.65.0", "", { "dependencies": { "axios": "~1.13.3", "lodash.identity": "^3.0.0", "lodash.merge": "^4.6.2", "lodash.pickby": "^4.6.0", "protobufjs": "^7.2.6", "qs": "^6.14.2", "ws": "^8.19.0" } }, "sha512-SkMeiFvi4mMVGrmBBh50vWPOgAvfbcpdcAW+iryheFFHUmji49aDch/YtxsKGFtzFlL/rseQXFzNFL8+LdQQ5Q=="],
 
     "@malept/cross-spawn-promise": ["@malept/cross-spawn-promise@2.0.0", "", { "dependencies": { "cross-spawn": "^7.0.1" } }, "sha512-1DpKU0Z5ThltBwjNySMC14g0CkbyhCaz9FkhxqNsZI6uAPJXFS8cMXlBKo26FJ8ZuW6S9GCMcR9IO5k2X5/9Fg=="],
 
@@ -1177,8 +1173,6 @@
     "dijkstrajs": ["dijkstrajs@1.0.3", "", {}, "sha512-qiSlmBq9+BCdCA/L46dw8Uy93mloxsPSbwnm5yrKn2vMPiy8KyAskTF6zuV/j5BMsmOGZDPs7KjU+mjb670kfA=="],
 
     "dingbat-to-unicode": ["dingbat-to-unicode@1.0.1", "", {}, "sha512-98l0sW87ZT58pU4i61wa2OHwxbiYSbuxsCBozaVnYX2iCnr3bLM3fIes1/ej7h1YdOKuKt/MLs706TVnALA65w=="],
-
-    "dingtalk-stream-sdk-nodejs": ["dingtalk-stream-sdk-nodejs@2.0.4", "", { "dependencies": { "axios": "^1.4.0", "debug": "^4.3.4", "ws": "^8.13.0" } }, "sha512-aVHQ72zAZ6upfuwQXhLvorDZY47uyOp8cvMFVrvLOws8tVCiM1YwFcKvcPthOt9c2gaGdv3BXHtnLeLeWFAv8Q=="],
 
     "dir-compare": ["dir-compare@4.2.0", "", { "dependencies": { "minimatch": "^3.0.5", "p-limit": "^3.1.0 " } }, "sha512-2xMCmOoMrdQIPHdsTawECdNPwlVFB9zGcz3kuhmBO6U3oU+UQjsue0i8ayLKpgBcm+hcXPMVSGUN9d+pvJ6+VQ=="],
 

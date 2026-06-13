@@ -24,7 +24,6 @@ export function getSettings(): AppSettings {
       onboardingCompleted: false,
       environmentCheckSkipped: false,
       notificationsEnabled: true,
-      feishuSessionMirror: { mode: 'off' },
     }
   }
 
@@ -37,7 +36,6 @@ export function getSettings(): AppSettings {
       onboardingCompleted: data.onboardingCompleted ?? false,
       environmentCheckSkipped: data.environmentCheckSkipped ?? false,
       notificationsEnabled: data.notificationsEnabled ?? true,
-      feishuSessionMirror: data.feishuSessionMirror ?? { mode: 'off' },
     }
   } catch (error) {
     console.error('[设置] 读取失败:', error)
@@ -46,7 +44,6 @@ export function getSettings(): AppSettings {
       onboardingCompleted: false,
       environmentCheckSkipped: false,
       notificationsEnabled: true,
-      feishuSessionMirror: { mode: 'off' },
     }
   }
 }

@@ -1245,7 +1245,7 @@ export class AgentOrchestrator {
         triggeredBy: input.triggeredBy,
       })
 
-      // 合并外部注入的自定义 MCP 服务器（如飞书群聊工具）
+      // 合并外部注入的自定义 MCP 服务器。
       if (customMcpServers) {
         Object.assign(mcpServers, customMcpServers)
         console.log(`[Agent 编排] 已合并 ${Object.keys(customMcpServers).length} 个自定义 MCP 服务器`)

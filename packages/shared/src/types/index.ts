@@ -42,12 +42,6 @@ export * from './system-prompt'
 // Chat 工具（function calling）相关类型
 export * from './chat-tool'
 
-// 飞书集成相关类型
-export * from './feishu'
-
-// 钉钉集成相关类型
-export * from './dingtalk'
-
 // 微信集成相关类型
 export * from './wechat'
 

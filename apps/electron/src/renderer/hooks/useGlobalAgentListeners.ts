@@ -387,7 +387,7 @@ export function useGlobalAgentListeners(): void {
           currentStreamState: store.get(agentStreamingStatesAtom).get(event.sessionId),
         })
 
-        // 外部来源（飞书/钉钉/微信/bridge）唤起的 run 不抢占前台：
+        // 外部来源（微信/bridge）唤起的 run 不抢占前台：
         // 不打开新 Tab、不切换激活 Tab、不切换 appMode/当前会话/当前工作区。
         // 只更新驱动左侧边栏列表与状态指示条所需的状态，让用户自行决定是否切过去。
         // 若该会话恰好是用户当前正在查看的会话，这里不动 Tab/激活，流式内容会通过
