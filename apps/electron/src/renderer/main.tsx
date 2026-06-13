@@ -53,11 +53,10 @@ import { useGlobalChatListeners } from './hooks/useGlobalChatListeners'
 import { tabsAtom, activeTabIdAtom, ensureScratchPadTab, scratchPadContentAtom, scratchPadLoadedAtom, SCRATCH_PAD_ID } from './atoms/tab-atoms'
 import type { TabItem } from './atoms/tab-atoms'
 import { chatToolsAtom } from './atoms/chat-tool-atoms'
-import { feishuBotStatesAtom } from './atoms/feishu-atoms'
 import { dingtalkBotStatesAtom } from './atoms/dingtalk-atoms'
 import { currentConversationIdAtom, channelsAtom, channelsLoadedAtom, selectedModelAtom } from './atoms/chat-atoms'
 import { appModeAtom } from './atoms/app-mode'
-import type { FeishuBotBridgeState, FeishuBridgeState, FeishuNotificationSentPayload, DingTalkBotBridgeState, DingTalkBridgeState } from '@proma/shared'
+import type { DingTalkBotBridgeState, DingTalkBridgeState } from '@proma/shared'
 import { Toaster } from './components/ui/sonner'
 import { toast } from 'sonner'
 import { diffCapabilities } from '@proma/shared'
@@ -465,81 +464,6 @@ function ChatToolInitializer(): null {
 }
 
 /**
- * 飞书集成初始化组件
- *
- * - 订阅飞书 Bridge 状态变化
- * - 定期上报用户在场状态（用于智能通知路由）
- * - 监听通知已发送事件（显示 Sonner + 桌面通知）
- */
-function FeishuInitializer(): null {
-  const store = useStore()
-
-  useEffect(() => {
-    // 加载初始多 Bot 状态
-    window.electronAPI.getFeishuMultiStatus?.()
-      .then((multiState: { bots: Record<string, FeishuBotBridgeState> }) => {
-        store.set(feishuBotStatesAtom, multiState.bots)
-      })
-      .catch(() => {
-        // 回退：使用旧 API 获取单 Bot 状态
-        window.electronAPI.getFeishuStatus()
-          .then((state: FeishuBridgeState) => {
-            const s = state as FeishuBotBridgeState
-            const botId = s.botId ?? 'default'
-            store.set(feishuBotStatesAtom, { [botId]: { ...s, botId, botName: s.botName ?? '飞书助手' } })
-          })
-          .catch((err: unknown) => console.error('[FeishuInitializer] 加载状态失败:', err))
-      })
-
-    // 订阅状态变化（现在每次推送包含 botId）
-    const cleanupStatus = window.electronAPI.onFeishuStatusChanged((raw: FeishuBridgeState) => {
-      const state = raw as FeishuBotBridgeState
-      const botId = state.botId ?? 'default'
-      store.set(feishuBotStatesAtom, (prev) => ({
-        ...prev,
-        [botId]: { ...state, botId, botName: state.botName ?? '飞书助手' },
-      }))
-    })
-
-    // 订阅通知已发送事件 → Sonner + 桌面通知
-    const cleanupNotif = window.electronAPI.onFeishuNotificationSent((payload: FeishuNotificationSentPayload) => {
-      toast('已发送到飞书', {
-        description: `${payload.sessionTitle}: ${payload.preview.slice(0, 60)}`,
-        duration: 3000,
-      })
-      // 桌面通知
-      if (Notification.permission === 'granted') {
-        new Notification('Proma → 飞书', {
-          body: `${payload.sessionTitle} 的回复已发送到飞书`,
-        })
-      }
-    })
-
-    // 定期上报在场状态（5 秒间隔 + 焦点变化时即时上报）
-    const reportPresence = (): void => {
-      const activeSessionId = store.get(currentAgentSessionIdAtom) ?? store.get(currentConversationIdAtom)
-      window.electronAPI.reportFeishuPresence({
-        activeSessionId,
-        lastInteractionAt: Date.now(),
-      }).catch(() => { /* 忽略 */ })
-    }
-    const interval = setInterval(reportPresence, 5000)
-    window.addEventListener('focus', reportPresence)
-    window.addEventListener('blur', reportPresence)
-
-    return () => {
-      cleanupStatus()
-      cleanupNotif()
-      clearInterval(interval)
-      window.removeEventListener('focus', reportPresence)
-      window.removeEventListener('blur', reportPresence)
-    }
-  }, [store])
-
-  return null
-}
-
-/**
  * DingTalkInitializer
  *
  * - 加载多 Bot 初始状态
@@ -887,7 +811,6 @@ if (isQuickTaskWindow) {
       <AgentListenersInitializer />
       <ChatToolInitializer />
       <UpdaterInitializer />
-      <FeishuInitializer />
       <DingTalkInitializer />
       <TabStatePersistenceInitializer />
       <ScratchPadPersistence />

@@ -119,7 +119,7 @@ export function listAgentWorkspaces(): AgentWorkspace[] {
   return index.workspaces.slice()
 }
 
-/** 按 updatedAt 降序（桥接/飞书列表等与旧版内联 sort 一致；渲染进程仍用 listAgentWorkspaces） */
+/** 按 updatedAt 降序（桥接列表等与旧版内联 sort 一致；渲染进程仍用 listAgentWorkspaces） */
 export function listAgentWorkspacesByUpdatedAt(): AgentWorkspace[] {
   const index = readIndex()
   return index.workspaces.slice().sort((a, b) => b.updatedAt - a.updatedAt)

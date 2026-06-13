@@ -790,9 +790,9 @@ export interface AgentSendInput {
   workspaceId?: string
   /** 附加的外部目录（绝对路径，传递给 SDK additionalDirectories） */
   additionalDirectories?: string[]
-  /** 动态注入的 MCP 服务器（仅在本次会话中生效，如飞书群聊工具） */
+  /** 动态注入的 MCP 服务器（仅在本次会话中生效） */
   customMcpServers?: Record<string, Record<string, unknown>>
-  /** 强制覆盖权限模式（飞书等无 UI 交互场景下强制 'bypassPermissions'） */
+  /** 强制覆盖权限模式（无 UI 交互场景下强制 'bypassPermissions'） */
   permissionModeOverride?: PromaPermissionMode
   /** 用户通过 /skill:xxx 引用的 Skill slug 列表 */
   mentionedSkills?: string[]

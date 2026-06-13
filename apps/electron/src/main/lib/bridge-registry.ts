@@ -1,7 +1,7 @@
 /**
  * Bridge Registry — 统一管理 IM Bridge 生命周期
  *
- * 解决的问题：每新增一个 Bridge（飞书、钉钉、微信…），都需要在 index.ts 的
+ * 解决的问题：每新增一个 Bridge，都需要在 index.ts 的
  * `app.whenReady()` 和 `before-quit` 两个位置分别添加启动/清理代码。
  * 遗漏任一处会导致 Bridge 不启动或进程无法正常退出。
  *

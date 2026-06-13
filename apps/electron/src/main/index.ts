@@ -93,8 +93,6 @@ import { startWorkspaceWatcher, stopWorkspaceWatcher } from './lib/workspace-wat
 import { startChatToolsWatcher, stopChatToolsWatcher } from './lib/chat-tools-watcher'
 import { getIsQuitting, setQuitting } from './lib/app-lifecycle'
 import { registerBridge, startAllBridges, stopAllBridges } from './lib/bridge-registry'
-import { feishuBridgeManager } from './lib/feishu-bridge-manager'
-import { getFeishuMultiBotConfig } from './lib/feishu-config'
 import { dingtalkBridgeManager } from './lib/dingtalk-bridge-manager'
 import { getDingTalkMultiBotConfig } from './lib/dingtalk-config'
 import { wechatBridge } from './lib/wechat-bridge'
@@ -119,16 +117,6 @@ function handleMigrationFileOpen(filePath: string): void {
 }
 
 // ===== Bridge 注册（新增 Bridge 只需在此添加一个 registerBridge 调用） =====
-
-registerBridge({
-  name: '飞书 BridgeManager',
-  shouldAutoStart: () => {
-    const config = getFeishuMultiBotConfig()
-    return config.bots.some((b) => b.enabled && b.appId && b.appSecret)
-  },
-  start: () => feishuBridgeManager.startAll(),
-  stop: () => feishuBridgeManager.stopAll(),
-})
 
 registerBridge({
   name: '钉钉 BridgeManager',
@@ -473,7 +461,7 @@ async function bootstrap(): Promise<void> {
     }),
   )
 
-  // 启动所有已注册的 Bridge（飞书/钉钉/微信等）
+  // 启动所有已注册的 Bridge（钉钉/微信等）
   await safeAwait('startAllBridges', () => startAllBridges())
 
   app.on('activate', () => {
@@ -526,7 +514,7 @@ function handleBootstrapFailure(err: unknown): void {
         `常见原因与排查：\n` +
         `1. 旧版 Proma 进程未退出（终端运行 killall Proma 后重试）\n` +
         `2. ~/.proma/ 配置损坏（重命名 ~/.proma 后重启）\n` +
-        `3. 系统 Keychain 无法解密保存的凭证（删除 ~/.proma/feishu.json 等后重新登录）\n\n` +
+        `3. 系统 Keychain 无法解密保存的凭证（重命名 ~/.proma 后重启）\n\n` +
         `如需协助请到 GitHub Issues 反馈。`,
     )
   } catch {

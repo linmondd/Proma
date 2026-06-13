@@ -236,7 +236,7 @@ export function PromaLogoSettings(): React.ReactElement {
       >
         <SettingsCard divided={false}>
           <div className="px-4 py-3 space-y-1.5 text-sm text-muted-foreground">
-            <p>建议使用 PNG 格式，飞书/钉钉头像推荐 200x200 以上。</p>
+            <p>建议使用 PNG 格式，机器人平台头像推荐 200x200 以上。</p>
             <p>透明背景版本适合需要自定义背景色的平台。</p>
             <p>渐变版和科技风格在社交平台头像中辨识度最高。</p>
           </div>

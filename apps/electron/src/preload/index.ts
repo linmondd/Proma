@@ -6,7 +6,7 @@
  */
 
 import { contextBridge, ipcRenderer, webUtils } from 'electron'
-import { IPC_CHANNELS, CHANNEL_IPC_CHANNELS, CHAT_IPC_CHANNELS, AGENT_IPC_CHANNELS, ENVIRONMENT_IPC_CHANNELS, INSTALLER_IPC_CHANNELS, PROXY_IPC_CHANNELS, GITHUB_RELEASE_IPC_CHANNELS, SYSTEM_PROMPT_IPC_CHANNELS, MEMORY_IPC_CHANNELS, CHAT_TOOL_IPC_CHANNELS, FEISHU_IPC_CHANNELS, DINGTALK_IPC_CHANNELS, WECHAT_IPC_CHANNELS } from '@proma/shared'
+import { IPC_CHANNELS, CHANNEL_IPC_CHANNELS, CHAT_IPC_CHANNELS, AGENT_IPC_CHANNELS, ENVIRONMENT_IPC_CHANNELS, INSTALLER_IPC_CHANNELS, PROXY_IPC_CHANNELS, GITHUB_RELEASE_IPC_CHANNELS, SYSTEM_PROMPT_IPC_CHANNELS, MEMORY_IPC_CHANNELS, CHAT_TOOL_IPC_CHANNELS, DINGTALK_IPC_CHANNELS, WECHAT_IPC_CHANNELS } from '@proma/shared'
 import { USER_PROFILE_IPC_CHANNELS, SETTINGS_IPC_CHANNELS, SCRATCH_PAD_IPC_CHANNELS, APP_ICON_IPC_CHANNELS, DOCK_BADGE_IPC_CHANNELS, STORAGE_IPC_CHANNELS } from '../types'
 import type {
   RuntimeStatus,
@@ -86,15 +86,6 @@ import type {
   AgentSessionReferenceSearchResult,
   DetachedPreviewWindowData,
   DetachedPreviewWindowInput,
-  FeishuConfig,
-  FeishuConfigInput,
-  FeishuBridgeState,
-  FeishuTestResult,
-  FeishuChatBinding,
-  FeishuPresenceReport,
-  FeishuNotifyMode,
-  FeishuNotificationSentPayload,
-  FeishuUpdateBindingInput,
   DingTalkConfig,
   DingTalkConfigInput,
   DingTalkBridgeState,
@@ -786,65 +777,6 @@ export interface ElectronAPI {
   // 工作区文件变化通知
   onCapabilitiesChanged: (callback: () => void) => () => void
   onWorkspaceFilesChanged: (callback: () => void) => () => void
-
-  // ===== 飞书集成 =====
-
-  /** 获取飞书配置 */
-  getFeishuConfig: () => Promise<FeishuConfig>
-  /** 获取解密后的 App Secret */
-  getDecryptedFeishuSecret: () => Promise<string>
-  /** 保存飞书配置（appSecret 为明文） */
-  saveFeishuConfig: (input: FeishuConfigInput) => Promise<FeishuConfig>
-  /** 测试飞书连接 */
-  testFeishuConnection: (appId: string, appSecret: string) => Promise<FeishuTestResult>
-  /** 启动飞书 Bridge */
-  startFeishuBridge: () => Promise<void>
-  /** 停止飞书 Bridge */
-  stopFeishuBridge: () => Promise<void>
-  /** 获取飞书 Bridge 状态 */
-  getFeishuStatus: () => Promise<FeishuBridgeState>
-  /** 获取活跃绑定列表 */
-  listFeishuBindings: () => Promise<FeishuChatBinding[]>
-  /** 更新绑定（修改工作区/会话） */
-  updateFeishuBinding: (input: FeishuUpdateBindingInput) => Promise<FeishuChatBinding | null>
-  /** 移除绑定 */
-  removeFeishuBinding: (chatId: string) => Promise<boolean>
-  /** 上报用户在场状态 */
-  reportFeishuPresence: (report: FeishuPresenceReport) => Promise<void>
-  /** 设置会话通知模式 */
-  setFeishuSessionNotify: (sessionId: string, mode: FeishuNotifyMode) => Promise<void>
-  /** 订阅飞书 Bridge 状态变化 */
-  onFeishuStatusChanged: (callback: (state: FeishuBridgeState) => void) => () => void
-  /** 订阅飞书通知已发送事件 */
-  onFeishuNotificationSent: (callback: (payload: FeishuNotificationSentPayload) => void) => () => void
-
-  // --- 多 Bot v2 API ---
-
-  /** 获取多 Bot 配置 */
-  getFeishuMultiConfig: () => Promise<import('@proma/shared').FeishuMultiBotConfig>
-  /** 保存单个 Bot 配置 */
-  saveFeishuBotConfig: (input: import('@proma/shared').FeishuBotConfigInput) => Promise<import('@proma/shared').FeishuBotConfig>
-  /** 获取单个 Bot 解密后的 App Secret */
-  getDecryptedFeishuBotSecret: (botId: string) => Promise<string>
-  /** 删除 Bot */
-  removeFeishuBot: (botId: string) => Promise<boolean>
-  /** 启动单个 Bot */
-  startFeishuBot: (botId: string) => Promise<void>
-  /** 停止单个 Bot */
-  stopFeishuBot: (botId: string) => Promise<void>
-  /** 获取多 Bot 状态 */
-  getFeishuMultiStatus: () => Promise<import('@proma/shared').FeishuMultiBridgeState>
-
-  // --- 扫码注册 ---
-
-  /** 启动扫码注册流程，等待用户扫码 + 飞书确认后返回 App ID/Secret */
-  registerFeishuApp: () => Promise<import('@proma/shared').FeishuRegisterAppResult>
-  /** 取消正在进行的扫码注册流程 */
-  cancelFeishuRegistration: () => Promise<void>
-  /** 监听二维码 URL 生成 */
-  onFeishuRegisterQrcode: (callback: (payload: import('@proma/shared').FeishuRegisterAppQRCode) => void) => () => void
-  /** 监听注册流程状态变化 */
-  onFeishuRegisterStatus: (callback: (payload: import('@proma/shared').FeishuRegisterAppStatus) => void) => () => void
 
   // ===== 钉钉集成 =====
 
@@ -1875,120 +1807,6 @@ const electronAPI: ElectronAPI = {
 
   getReleaseByTag: (tag) => {
     return ipcRenderer.invoke(GITHUB_RELEASE_IPC_CHANNELS.GET_RELEASE_BY_TAG, tag)
-  },
-
-  // ===== 飞书集成 =====
-
-  getFeishuConfig: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.GET_CONFIG)
-  },
-
-  getDecryptedFeishuSecret: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.GET_DECRYPTED_SECRET)
-  },
-
-  saveFeishuConfig: (input: FeishuConfigInput) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.SAVE_CONFIG, input)
-  },
-
-  testFeishuConnection: (appId: string, appSecret: string) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.TEST_CONNECTION, appId, appSecret)
-  },
-
-  startFeishuBridge: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.START_BRIDGE)
-  },
-
-  stopFeishuBridge: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.STOP_BRIDGE)
-  },
-
-  getFeishuStatus: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.GET_STATUS)
-  },
-
-  listFeishuBindings: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.LIST_BINDINGS)
-  },
-
-  updateFeishuBinding: (input: FeishuUpdateBindingInput) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.UPDATE_BINDING, input)
-  },
-
-  removeFeishuBinding: (chatId: string) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.REMOVE_BINDING, chatId)
-  },
-
-  reportFeishuPresence: (report: FeishuPresenceReport) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.REPORT_PRESENCE, report)
-  },
-
-  setFeishuSessionNotify: (sessionId: string, mode: FeishuNotifyMode) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.SET_SESSION_NOTIFY, sessionId, mode)
-  },
-
-  onFeishuStatusChanged: (callback: (state: FeishuBridgeState) => void) => {
-    const listener = (_event: Electron.IpcRendererEvent, state: FeishuBridgeState): void => callback(state)
-    ipcRenderer.on(FEISHU_IPC_CHANNELS.STATUS_CHANGED, listener)
-    return () => { ipcRenderer.removeListener(FEISHU_IPC_CHANNELS.STATUS_CHANGED, listener) }
-  },
-
-  onFeishuNotificationSent: (callback: (payload: FeishuNotificationSentPayload) => void) => {
-    const listener = (_event: Electron.IpcRendererEvent, payload: FeishuNotificationSentPayload): void => callback(payload)
-    ipcRenderer.on(FEISHU_IPC_CHANNELS.NOTIFICATION_SENT, listener)
-    return () => { ipcRenderer.removeListener(FEISHU_IPC_CHANNELS.NOTIFICATION_SENT, listener) }
-  },
-
-  // --- 多 Bot v2 API ---
-
-  getFeishuMultiConfig: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.GET_MULTI_CONFIG)
-  },
-
-  saveFeishuBotConfig: (input: import('@proma/shared').FeishuBotConfigInput) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.SAVE_BOT_CONFIG, input)
-  },
-
-  getDecryptedFeishuBotSecret: (botId: string) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.GET_BOT_DECRYPTED_SECRET, botId)
-  },
-
-  removeFeishuBot: (botId: string) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.REMOVE_BOT, botId)
-  },
-
-  startFeishuBot: (botId: string) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.START_BOT, botId)
-  },
-
-  stopFeishuBot: (botId: string) => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.STOP_BOT, botId)
-  },
-
-  getFeishuMultiStatus: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.GET_MULTI_STATUS)
-  },
-
-  // --- 扫码注册 ---
-
-  registerFeishuApp: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.REGISTER_APP_START)
-  },
-
-  cancelFeishuRegistration: () => {
-    return ipcRenderer.invoke(FEISHU_IPC_CHANNELS.REGISTER_APP_CANCEL)
-  },
-
-  onFeishuRegisterQrcode: (callback: (payload: import('@proma/shared').FeishuRegisterAppQRCode) => void) => {
-    const listener = (_: unknown, payload: import('@proma/shared').FeishuRegisterAppQRCode) => callback(payload)
-    ipcRenderer.on(FEISHU_IPC_CHANNELS.REGISTER_APP_QRCODE, listener)
-    return () => { ipcRenderer.removeListener(FEISHU_IPC_CHANNELS.REGISTER_APP_QRCODE, listener) }
-  },
-
-  onFeishuRegisterStatus: (callback: (payload: import('@proma/shared').FeishuRegisterAppStatus) => void) => {
-    const listener = (_: unknown, payload: import('@proma/shared').FeishuRegisterAppStatus) => callback(payload)
-    ipcRenderer.on(FEISHU_IPC_CHANNELS.REGISTER_APP_STATUS, listener)
-    return () => { ipcRenderer.removeListener(FEISHU_IPC_CHANNELS.REGISTER_APP_STATUS, listener) }
   },
 
   // ===== 微信集成 =====

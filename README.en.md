@@ -14,7 +14,7 @@ It is not just another chat box. Proma is meant to become a long-lived Agent wor
 - **Agent mode**: general-purpose Agent powered by `@anthropic-ai/claude-agent-sdk`, with workspace isolation, permission modes, file operations, streaming output, plan confirmation, and ask-user interactions.
 - **SubAgents / Tasks**: complex tasks can be delegated through the Claude Agent SDK Agent tool, with sub-agent calls and results shown in the message stream.
 - **Skills & MCP**: each workspace can manage its own Skills, MCP servers, and workspace files.
-- **Remote bots**: Lark / Feishu bot bridging is supported, with DingTalk and WeChat bridge entry points also present in the app.
+- **Remote bots**: DingTalk and WeChat bridge entry points let mobile or group chats trigger local Agent workflows.
 - **Memory and tools**: Chat and Agent can share memory, with web search, built-in Chat tools, and Agent recommendation helpers.
 - **Local-first data**: conversations, workspaces, attachments, settings, and Skills are stored under `~/.proma/` as JSON / JSONL files, without a local database.
 - **Desktop experience**: auto-update, proxy settings, file preview, global shortcuts, quick task window, voice input, and light / dark / system themes.
@@ -34,7 +34,7 @@ If you want fewer API setup steps, you can also use the [Proma commercial versio
 3. Chat mode can use OpenAI, Anthropic, Google, or OpenAI-compatible channels.
 4. Agent mode requires an Anthropic or Anthropic-compatible channel, such as Anthropic, DeepSeek, Kimi API, or Kimi Coding Plan.
 5. Go to **Settings > Agent** and choose the default Agent channel, model, and workspace.
-6. Configure memory, web search, or Feishu / DingTalk / WeChat bridges from their corresponding settings tabs if needed.
+6. Configure memory, web search, or DingTalk / WeChat bridges from their corresponding settings tabs if needed.
 
 ## Choosing A Mode
 
@@ -226,7 +226,7 @@ Main-process services live in `apps/electron/src/main/lib/`:
 - `chat-service.ts`: Chat streaming, Provider Adapters, tool activity.
 - `conversation-manager.ts`: Chat session index and message storage.
 - `channel-manager.ts`: channel CRUD, API key encryption, connection tests, model fetching.
-- `feishu-bridge.ts` / `dingtalk-bridge.ts` / `wechat-bridge.ts`: remote bot bridges.
+- `dingtalk-bridge.ts` / `wechat-bridge.ts`: remote bot bridges.
 - `memory-service.ts`, `chat-tool-*`, `document-parser.ts`, `workspace-watcher.ts`: memory, tools, document parsing, and file watching.
 
 Renderer state is managed with Jotai. Key atoms live in `apps/electron/src/renderer/atoms/`. Agent IPC listeners are mounted globally at the app root so streaming events, permission requests, and background tasks survive view changes.

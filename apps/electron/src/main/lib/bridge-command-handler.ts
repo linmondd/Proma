@@ -4,7 +4,7 @@
  * 为微信、钉钉等平台提供统一的斜杠命令和 Agent 消息路由。
  * 各平台通过 BridgePlatformAdapter 接入，只需实现发送文本的方法。
  *
- * 飞书 Bridge 使用独立的卡片消息格式，暂不接入此模块。
+ * 需要独立卡片消息格式的平台可自行实现适配器。
  */
 
 import { BrowserWindow } from 'electron'

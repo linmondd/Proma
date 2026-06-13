@@ -37,7 +37,7 @@ const eventBus = new AgentEventBus()
 const adapter = new ClaudeAgentAdapter()
 const orchestrator = new AgentOrchestrator(adapter, eventBus)
 
-/** 导出 EventBus 供飞书 Bridge 等外部服务订阅事件 */
+/** 导出 EventBus 供外部服务订阅事件 */
 export { eventBus as agentEventBus }
 
 /**
@@ -51,7 +51,7 @@ const sessionWebContents = new Map<string, WebContents>()
 /**
  * 已挂载 destroyed 回收钩子的 webContents 集合。
  *
- * 同一个主窗口 webContents 可能被多次注册（飞书 Bridge 每条消息触发一次 runAgentHeadless），
+ * 同一个主窗口 webContents 可能被多次注册（外部 Bridge 每条消息触发一次 runAgentHeadless），
  * 用 WeakSet 去重避免 once listener 在同一 wc 上累积，触发 MaxListenersExceededWarning。
  */
 const wcWithCleanupHook = new WeakSet<WebContents>()
@@ -157,10 +157,10 @@ export async function runAgent(
 }
 
 /**
- * 无渲染进程的 Agent 运行（供飞书 Bridge 等外部调用方使用）
+ * 无渲染进程的 Agent 运行（供外部调用方使用）
  *
  * 如果桌面窗口存在，同时注册 webContents 以便事件同步到桌面端 UI。
- * 事件同时通过 EventBus listeners 分发给飞书 Bridge。
+ * 事件同时通过 EventBus listeners 分发给外部 Bridge。
  */
 export async function runAgentHeadless(
   input: AgentSendInput,
