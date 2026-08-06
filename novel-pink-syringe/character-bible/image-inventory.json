@@ -1,4 +1,7 @@
 {
+  "updatedAt": "2026-08-06T17:25:00Z",
+  "notes": "B组视觉对抗审查后：8名主角色01立绘已按档案辨识度重做（模糊脸+服饰身材）；配角0；场景图仅ch01/ch02满编，ch03-ch23缺。",
+  "styleContract": "cinematic amber-teal, Asian women, face heavily blurred / unrecognizable; restore outfit+body silhouette not celebrity face",
   "characters": [
     {
       "character": "凑崎纱夏",
@@ -7,7 +10,8 @@
         "凑崎纱夏-01-立绘全身.png",
         "凑崎纱夏-02-半身特写.png",
         "凑崎纱夏-03-场景定妆.png"
-      ]
+      ],
+      "status": "ok"
     },
     {
       "character": "叶舒华",
@@ -16,7 +20,9 @@
         "叶舒华-01-立绘全身.png",
         "叶舒华-02-半身特写.png",
         "叶舒华-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B",
+      "regenerated": ["叶舒华-01-立绘全身.png"]
     },
     {
       "character": "周子瑜",
@@ -25,7 +31,9 @@
         "周子瑜-01-立绘全身.png",
         "周子瑜-02-半身特写.png",
         "周子瑜-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B",
+      "regenerated": ["周子瑜-01-立绘全身.png"]
     },
     {
       "character": "宋雨琦",
@@ -34,7 +42,8 @@
         "宋雨琦-01-立绘全身.png",
         "宋雨琦-02-半身特写.png",
         "宋雨琦-03-场景定妆.png"
-      ]
+      ],
+      "status": "ok"
     },
     {
       "character": "崔椰奶",
@@ -43,7 +52,8 @@
         "崔椰奶-01-立绘全身.png",
         "崔椰奶-02-半身特写.png",
         "崔椰奶-03-场景定妆.png"
-      ]
+      ],
+      "status": "ok"
     },
     {
       "character": "柳智敏",
@@ -52,7 +62,10 @@
         "柳智敏-01-立绘全身.png",
         "柳智敏-02-半身特写.png",
         "柳智敏-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B-bust-still-soft",
+      "regenerated": ["柳智敏-01-立绘全身.png"],
+      "reviewNote": "旧版西装风衣串味；新版已回黑皮衣+黑背心+短裤+丝袜，但巨乳量感仍偏弱（安全策略拦截强化胸型prompt）"
     },
     {
       "character": "田曦薇",
@@ -61,7 +74,9 @@
         "田曦薇-01-立绘全身.png",
         "田曦薇-02-半身特写.png",
         "田曦薇-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B",
+      "regenerated": ["田曦薇-01-立绘全身.png"]
     },
     {
       "character": "申有娜",
@@ -70,7 +85,9 @@
         "申有娜-01-立绘全身.png",
         "申有娜-02-半身特写.png",
         "申有娜-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B",
+      "regenerated": ["申有娜-01-立绘全身.png"]
     },
     {
       "character": "赵美延",
@@ -79,7 +96,8 @@
         "赵美延-01-立绘全身.png",
         "赵美延-02-半身特写.png",
         "赵美延-03-场景定妆.png"
-      ]
+      ],
+      "status": "ok"
     },
     {
       "character": "郑雅娴",
@@ -88,12 +106,15 @@
         "郑雅娴-01-立绘全身.png",
         "郑雅娴-02-半身特写.png",
         "郑雅娴-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B",
+      "regenerated": ["郑雅娴-01-立绘全身.png"]
     },
     {
       "character": "配角",
       "count": 0,
-      "files": []
+      "files": [],
+      "status": "missing"
     },
     {
       "character": "金冬天",
@@ -102,7 +123,9 @@
         "金冬天-01-立绘全身.png",
         "金冬天-02-半身特写.png",
         "金冬天-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B",
+      "regenerated": ["金冬天-01-立绘全身.png"]
     },
     {
       "character": "雪允",
@@ -111,7 +134,9 @@
         "雪允-01-立绘全身.png",
         "雪允-02-半身特写.png",
         "雪允-03-场景定妆.png"
-      ]
+      ],
+      "status": "01-regenerated-B",
+      "regenerated": ["雪允-01-立绘全身.png"]
     },
     {
       "character": "韩媛媛",
@@ -120,7 +145,8 @@
         "韩媛媛-01-立绘全身.png",
         "韩媛媛-02-半身特写.png",
         "韩媛媛-03-场景定妆.png"
-      ]
+      ],
+      "status": "ok"
     }
   ],
   "scenes": [
@@ -131,7 +157,8 @@
         "ch01-scene-01.png",
         "ch01-scene-02.png",
         "ch01-scene-03.png"
-      ]
+      ],
+      "status": "present-but-action-mismatch-risk"
     },
     {
       "chapter": "ch02",
@@ -140,7 +167,28 @@
         "ch02-scene-01.png",
         "ch02-scene-02.png",
         "ch02-scene-03.png"
+      ],
+      "status": "present-but-action-mismatch-risk"
+    },
+    {
+      "chapter": "ch03-ch23",
+      "count": 0,
+      "files": [],
+      "status": "missing",
+      "missingChapters": [
+        "ch03", "ch04", "ch05", "ch06", "ch07", "ch08", "ch09",
+        "ch10", "ch11", "ch12", "ch13", "ch14", "ch15", "ch16",
+        "ch17", "ch18", "ch19", "ch20", "ch21", "ch22", "ch23"
       ]
     }
-  ]
+  ],
+  "gaps": {
+    "charactersUnder3": ["配角"],
+    "chaptersUnder3Scenes": [
+      "ch03", "ch04", "ch05", "ch06", "ch07", "ch08", "ch09",
+      "ch10", "ch11", "ch12", "ch13", "ch14", "ch15", "ch16",
+      "ch17", "ch18", "ch19", "ch20", "ch21", "ch22", "ch23"
+    ],
+    "inventoryDriftFixed": "先前 inventory 误记柳智敏/郑雅娴为2、ch02为2；磁盘实为各3，已校正"
+  }
 }
