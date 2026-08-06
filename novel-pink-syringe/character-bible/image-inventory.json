@@ -47,10 +47,11 @@
     },
     {
       "character": "柳智敏",
-      "count": 2,
+      "count": 3,
       "files": [
         "柳智敏-01-立绘全身.png",
-        "柳智敏-02-半身特写.png"
+        "柳智敏-02-半身特写.png",
+        "柳智敏-03-场景定妆.png"
       ]
     },
     {
@@ -82,9 +83,10 @@
     },
     {
       "character": "郑雅娴",
-      "count": 2,
+      "count": 3,
       "files": [
         "郑雅娴-01-立绘全身.png",
+        "郑雅娴-02-半身特写.png",
         "郑雅娴-03-场景定妆.png"
       ]
     },
@@ -133,10 +135,11 @@
     },
     {
       "chapter": "ch02",
-      "count": 2,
+      "count": 3,
       "files": [
         "ch02-scene-01.png",
-        "ch02-scene-02.png"
+        "ch02-scene-02.png",
+        "ch02-scene-03.png"
       ]
     }
   ]
