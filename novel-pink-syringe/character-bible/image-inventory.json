@@ -1,0 +1,143 @@
+{
+  "characters": [
+    {
+      "character": "凑崎纱夏",
+      "count": 3,
+      "files": [
+        "凑崎纱夏-01-立绘全身.png",
+        "凑崎纱夏-02-半身特写.png",
+        "凑崎纱夏-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "叶舒华",
+      "count": 3,
+      "files": [
+        "叶舒华-01-立绘全身.png",
+        "叶舒华-02-半身特写.png",
+        "叶舒华-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "周子瑜",
+      "count": 3,
+      "files": [
+        "周子瑜-01-立绘全身.png",
+        "周子瑜-02-半身特写.png",
+        "周子瑜-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "宋雨琦",
+      "count": 3,
+      "files": [
+        "宋雨琦-01-立绘全身.png",
+        "宋雨琦-02-半身特写.png",
+        "宋雨琦-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "崔椰奶",
+      "count": 3,
+      "files": [
+        "崔椰奶-01-立绘全身.png",
+        "崔椰奶-02-半身特写.png",
+        "崔椰奶-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "柳智敏",
+      "count": 2,
+      "files": [
+        "柳智敏-01-立绘全身.png",
+        "柳智敏-02-半身特写.png"
+      ]
+    },
+    {
+      "character": "田曦薇",
+      "count": 3,
+      "files": [
+        "田曦薇-01-立绘全身.png",
+        "田曦薇-02-半身特写.png",
+        "田曦薇-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "申有娜",
+      "count": 3,
+      "files": [
+        "申有娜-01-立绘全身.png",
+        "申有娜-02-半身特写.png",
+        "申有娜-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "赵美延",
+      "count": 3,
+      "files": [
+        "赵美延-01-立绘全身.png",
+        "赵美延-02-半身特写.png",
+        "赵美延-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "郑雅娴",
+      "count": 2,
+      "files": [
+        "郑雅娴-01-立绘全身.png",
+        "郑雅娴-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "配角",
+      "count": 0,
+      "files": []
+    },
+    {
+      "character": "金冬天",
+      "count": 3,
+      "files": [
+        "金冬天-01-立绘全身.png",
+        "金冬天-02-半身特写.png",
+        "金冬天-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "雪允",
+      "count": 3,
+      "files": [
+        "雪允-01-立绘全身.png",
+        "雪允-02-半身特写.png",
+        "雪允-03-场景定妆.png"
+      ]
+    },
+    {
+      "character": "韩媛媛",
+      "count": 3,
+      "files": [
+        "韩媛媛-01-立绘全身.png",
+        "韩媛媛-02-半身特写.png",
+        "韩媛媛-03-场景定妆.png"
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "chapter": "ch01",
+      "count": 3,
+      "files": [
+        "ch01-scene-01.png",
+        "ch01-scene-02.png",
+        "ch01-scene-03.png"
+      ]
+    },
+    {
+      "chapter": "ch02",
+      "count": 2,
+      "files": [
+        "ch02-scene-01.png",
+        "ch02-scene-02.png"
+      ]
+    }
+  ]
+}
