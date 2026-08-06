@@ -71,7 +71,7 @@ def build_md(chapters: list[tuple[int, str, str]]) -> None:
     chunks = [
         "# 粉色真迹·练舞室\n",
         "\n",
-        "> 黄文系统改写版（v7）。全章口语密写；崔叡娜／吴海媛；蕾丝 T/P。\n",
+        "> 黄文精修版（v8）。清晰面孔；声口分色；崔叡娜／吴海媛；蕾丝 T/P。\n",
         "\n",
     ]
     for i, title, body in chapters:
@@ -125,11 +125,11 @@ def build_epub(chapters: list[tuple[int, str, str]]) -> None:
         opf = tmp / "EPUB" / "content.opf"
         opf_text = opf.read_text(encoding="utf-8")
         opf_text = re.sub(
-            r"urn:pink-syringe:v\d+", "urn:pink-syringe:v7", opf_text
+            r"urn:pink-syringe:v\d+", "urn:pink-syringe:v8", opf_text
         )
         opf_text = re.sub(
             r"<dc:description>.*?</dc:description>",
-            "<dc:description>黄文系统改写版 v7。1-23章口语密写；砍工业复读；崔叡娜／吴海媛；蕾丝T/P。</dc:description>",
+            "<dc:description>黄文精修版 v8。清晰面孔半身立绘；声口分色；huangwen-xiezuo skill 互证。</dc:description>",
             opf_text,
             count=1,
             flags=re.S,
